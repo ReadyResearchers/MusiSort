@@ -7,12 +7,15 @@ AutoMusicSort is a tool being developed to collect music and put them into simil
 
 Current Project Goals:
 
-[~] Develop the algorithm to sort songs into categories.
-[x] Optimize the algorithms used to sort songs for faster completion.
-[x] Create a more user friendly terminal interface for easier usage.
-[x] Develop a GUI for more interactivity with the program.
+[🏗️] Develop the algorithm to sort songs into categories.
 
-(~ : in progress , x : not started yet , o : completed)
+[❌] Optimize the algorithms used to sort songs for faster completion.
+
+[❌] Create a more user friendly terminal interface for easier usage.
+
+[❌] Develop a GUI for more interactivity with the program.
+
+(🏗️ : in progress , ❌ : not started yet , ✅ : completed)
 
 # Information
 
