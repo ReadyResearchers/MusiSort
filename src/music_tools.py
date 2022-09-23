@@ -8,16 +8,14 @@ if not sys.warnoptions:
     warnings.simplefilter("ignore")
 
 def load_audio_from_files(paths):
+    audio_list = []
     for index, path in enumerate(paths):
-        print("Max of", index, ":", read_audio_file(path));
+        audio_list.append((path, read_audio_file(path)[0]));
+    return audio_list
 
 def read_audio_file(path):
     try:
-        y, sr = librosa.load(path)
-        max = 0
-        for i in y:
-            if(max < abs(i)):
-                max = i
-        return max
+        info = librosa.load(path)
+        return info
     except Exception as e:
         print("An error occured in loading an audio file : \n", e)

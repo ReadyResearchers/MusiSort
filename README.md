@@ -19,6 +19,8 @@ AutoMusicSort is a tool being developed to collect music and put them into simil
 
 # Information
 
+It is recommended to use wav files when running the program as it provides improved performance.
+
 **Current Dependencies Needed:**
 
 - Typer : pip install "typer[all]"

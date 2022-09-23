@@ -7,7 +7,6 @@ category_count = 10
 
 samples_before = 0
 last_peak = 0
-peak_data = []
 sampleDivider = 100.0
 
 currentLevelSum = 0
@@ -15,7 +14,16 @@ currentLevelSum = 0
 # Used to store data from generate_peak_data for each song
 songs_info = []
 
+def load_data_from_songs(songs_data):
+    for info in songs_data:
+        array = generate_peak_data(info[0], info[1])
+        arraySum = generate_peak_summation(array)
+        songs_info.append((info[0], arraySum))
+    return songs_info
+
 def generate_peak_data(song_path, song_data):
+    global samples_before
+    global last_peak
     # This function is used to gather the data from the waveform of a song
     
     # max will be used to divide all of the peak's values to equalize values between songs
@@ -27,8 +35,8 @@ def generate_peak_data(song_path, song_data):
     for index, sample in enumerate(song_data):
         if abs(sample) > max:
             max = (sample)
-        sampleB = 0 if index == 0 else song_data.get(index - 1)
-        sampleA = 0 if index + 1 > length else song_data.get(index + 1)
+        sampleB = 0 if index == 0 else song_data[index - 1]
+        sampleA = 0 if index + 1 >= length else song_data[index + 1]
         # if the sample before and after are both higher or lower than the current sample,
         # the current sample is a peak within the song's waveform
         if((sampleB < sample and sampleA < sample) or (sampleB > sample and sampleA > sample)):
@@ -49,6 +57,7 @@ def generate_peak_data(song_path, song_data):
     return (np.asarray(peak_data) / max)
             
 def generate_peak_summation(song_data):
+    global currentLevelSum
     # This function uses the output from generate_peak_data to further condense the data for 
     # optimization during neural network training.
     
@@ -56,11 +65,14 @@ def generate_peak_summation(song_data):
     # add the values in these splices together to get a total change in a particular time frame
     
     # These splices are what the neural network will use a training data
+    length = len(song_data)
     peaks_final = np.zeros(input_count)
-    peaksPerSum = len(song_data) / input_count
-    for index, i in enumerate(range(0, len(song_data), peaksPerSum)):
+    peaksPerSum = (int) (length / input_count)
+    for index, i in enumerate(range(0, length, peaksPerSum)):
+        if index >= input_count:
+            return peaks_final
         for j in range(0, peaksPerSum, 1):
-            currentLevelSum += song_data[i + j]
+                currentLevelSum += song_data[i + j]
         peaks_final[index] = currentLevelSum
         currentLevelSum = 0
     return peaks_final
