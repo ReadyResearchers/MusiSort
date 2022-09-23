@@ -28,6 +28,11 @@ It is recommended to use wav files when running the program as it provides impro
 - NumPy : pip install numpy
 - ffmpeg : pip install ffmpeg
 
+May be needed:
+
+- OpenCV - pip install opencv-python
+- matplotlib - pip install matplotlib
+
 **Run command:**
 
 `python ./src/main.py "folder_path_to_audio_files"`

@@ -16,10 +16,6 @@ songs_data = []
 sum_data = []
 
 def main():
-    length = 9929192
-    input_count = 100
-    peaksPerSum = (int) (length / input_count)
-    print(":", len(range(0, length, peaksPerSum)))
     print("The current directory is at :", os.getcwd())
     path = os.getcwd() + input("What folder should music be read in from? : ")
     for audio_format in audio_formats:
@@ -28,7 +24,13 @@ def main():
     print("\nFound", len(songs_list), "audio files within the folder!")
     if (input("\nIs this correct? (y/n): ")).lower() == "y":
         songs_data = mst.load_audio_from_files(songs_list)
+        #print(len(songs_data[0][1]))
+        #print(len(songs_data[1][1]))
+        #dt.generate_peak_data2(songs_data[0][1])
+        #dt.generate_peak_data2(songs_data[1][1])
         sum_data = dt.load_data_from_songs(songs_data)
+        for info in sum_data:
+            mst.view_data_array(info[1])
     else:
         print("\nGood day.")
         exit()

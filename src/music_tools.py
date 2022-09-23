@@ -2,6 +2,9 @@ import librosa
 import os
 import platform
 import sys
+import cv2
+import matplotlib.pyplot as plt
+import numpy as np
 
 if not sys.warnoptions:
     import warnings
@@ -19,3 +22,9 @@ def read_audio_file(path):
         return info
     except Exception as e:
         print("An error occured in loading an audio file : \n", e)
+        
+def view_data_array(array):
+    val = 0
+    print("\n\n", array, "\n\n")
+    #plt.plot(array, np.zeros_like(array) + val, 'x')
+    #plt.show()

@@ -21,6 +21,14 @@ def load_data_from_songs(songs_data):
         songs_info.append((info[0], arraySum))
     return songs_info
 
+def generate_peak_data2(song_data):
+    count = []
+    for index, sample in enumerate(song_data):
+        if(index > 200):
+            print(count)
+            return
+        count.append(sample)
+
 def generate_peak_data(song_path, song_data):
     global samples_before
     global last_peak
