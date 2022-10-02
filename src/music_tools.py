@@ -17,12 +17,12 @@ if not sys.warnoptions:
     import warnings
     warnings.simplefilter("ignore")
 
-def load_audio_from_files(paths): # Deprecated --
-    audio_list = []
-    for index, path in enumerate(paths):
-        audio_list.append((path, read_audio_file(path)[0]));
-        time.sleep(1)
-    return audio_list
+#def load_audio_from_files(paths): # Deprecated --
+#    audio_list = []
+#    for index, path in enumerate(paths):
+#        audio_list.append((path, read_audio_file(path)[0]));
+#        time.sleep(1)
+#    return audio_list
 
 def load_audio_from_files(paths):
     for index, path in enumerate(paths):
@@ -32,10 +32,12 @@ def load_audio_from_files(paths):
         if loaded_data == None:
             # Get the file name of the song and audio data
             audio_name = ff.get_audio_name_from_path(path)
-            audio_full = read_audio_file(path)[0];
+            print(path)
+            audio_read = read_audio_file(path);
             # If audio data failed to load, skip to next song
-            if audio_full == None: 
+            if audio_read == None: 
                 continue
+            audio_full = audio_read[0]
             # Parse audio data with data tools methods
             audio_data = dt.load_data_from_song(audio_full)
             # Save parsed data to numpy files for future use
@@ -60,7 +62,7 @@ def read_audio_file(path):
         info = librosa.load(path)
         return info
     except Exception as e:
-        print("An error occured in loading an audio file : \n", e)
+        print("An error occured in loading an audio file : \n", repr(e))
         return None
         
 def view_data_array(array):

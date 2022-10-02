@@ -5,11 +5,11 @@ import numpy as np
 
 def create_project_directories(project_path):
     if os.path.exists(project_path + "/audio_data") == False:
-        os.mkdir(project_path, "audio_data")
+        os.mkdir(project_path + "/audio_data")
     if os.path.exists(project_path + "/" + vd.uncompressed_data_dir) == False:
-        os.mkdir(project_path + "/audio_data", vd.uncompressed_data_dir)
+        os.mkdir(project_path + "/" + vd.uncompressed_data_dir)
     if os.path.exists(project_path + "/" + vd.compressed_data_dir) == False:
-        os.mkdir(project_path + "/audio_data", vd.compressed_data_dir)
+        os.mkdir(project_path + "/" + vd.compressed_data_dir)
         
 def get_audio_name_from_path(path):
     file_name = path
@@ -30,8 +30,8 @@ def load_local_data_file(path):
     saved_name = audio_file_name[2] + ".npy"
     uncomp = ""
     comp = ""
-    if os.exists(vd.program_path + "/" + vd.compressed_data_dir + "/" + saved_name):
-        if os.exists(vd.program_path + "/" + vd.uncompressed_data_dir + "/" + saved_name):
+    if os.path.exists(vd.program_path + "/" + vd.compressed_data_dir + "/" + saved_name):
+        if os.path.exists(vd.program_path + "/" + vd.uncompressed_data_dir + "/" + saved_name):
             uncomp = vd.program_path + "/" + vd.uncompressed_data_dir + "/" + saved_name
             comp = vd.program_path + "/" + vd.compressed_data_dir + "/" + saved_name
             return (audio_file_name[2], np.load(uncomp), np.load(comp))
@@ -44,7 +44,7 @@ def save_data_to_file(data, name, is_compressed):
     # Data must be a numpy array
     path_choice = vd.compressed_data_dir if is_compressed else vd.uncompressed_data_dir
     path_choice = vd.program_path + "/" + path_choice + "/" + name[2] + ".npy"
-    if os.exists(path_choice):
+    if os.path.exists(path_choice):
         os.remove(path_choice)
     np.save(path_choice, data)
     

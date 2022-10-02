@@ -6,6 +6,7 @@ import data_tools as dt
 import numpy as np
 import sys
 import var_data as vd
+import file_functions as ff
 
 # Common audio file extensions to look for
 audio_formats = ["mp3", "ogg", "wav", "flac", "m4a", "aac", "webm", "opus"]
@@ -19,7 +20,7 @@ sum_data = []
 
 def initilize_program():
     vd.program_path = sys.path[0]
-    create_project_directories(vd.program_path)
+    ff.create_project_directories(vd.program_path)
     vd.music_files_path = os.getcwd() + input("What folder should music be read in from? : ")
 
 def main():
@@ -33,13 +34,8 @@ def main():
             
     print("\nFound", len(songs_list), "audio files within the folder!")
     if (input("\nIs this correct? (y/n): ")).lower() == "y":
-        songs_data = mst.load_audio_from_files(songs_list)
-        #print(len(songs_data[0][1]))
-        #print(len(songs_data[1][1]))
-        #dt.generate_peak_data2(songs_data[0][1])
-        #dt.generate_peak_data2(songs_data[1][1])
-        sum_data = dt.load_data_from_songs(songs_data)
-        for info in sum_data:
+        mst.load_audio_from_files(songs_list)
+        for info in vd.compressed_audio:
             mst.view_data_array(info[1])
     else:
         print("\nGood day.")
