@@ -38,3 +38,5 @@ def main():
     
 if __name__ == "__main__":
     main()
+    
+# coophenetic coorelation co-efficient -> for deciding if clustering is good
