@@ -39,7 +39,7 @@ def load_audio_from_files(paths):
                 continue
             audio_full = audio_read[0]
             # Parse audio data with data tools methods
-            audio_data = dt.load_data_from_song(audio_full)
+            audio_data = dt.load_data_from_song((path, audio_full))
             # Save parsed data to numpy files for future use
             if vd.save_uncompressed:
                 ff.save_data_to_file(audio_data[0], audio_name, False)

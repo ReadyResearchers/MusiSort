@@ -2,7 +2,7 @@
 compressed_audio = []
 
 # settings variables
-save_uncompressed = False
+save_uncompressed = True
 
 # file_functions variables
 program_path = ""
