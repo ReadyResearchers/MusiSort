@@ -13,7 +13,9 @@ def load_data_from_songs(songs_data): # Deprecated --
     return songs_info
 
 def load_data_from_song(song):
+    # Uncompressed
     array = generate_peak_data(song[0], song[1])
+    # Compressed
     arraySum = generate_peak_summation(array)
     return (array, arraySum)
 

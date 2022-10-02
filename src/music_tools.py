@@ -9,6 +9,7 @@ import numpy as np
 import time
 import var_data as vd
 import file_functions as ff
+import data_tools as dt
 
 matplotlib.use('Agg') 
 
@@ -24,20 +25,35 @@ def load_audio_from_files(paths): # Deprecated --
     return audio_list
 
 def load_audio_from_files(paths):
-    audio_list = []
     for index, path in enumerate(paths):
         loaded_data = ff.load_local_data_file(path)
         
+        # No numpy file was found for the song retrieved
         if loaded_data == None:
+            # Get the file name of the song and audio data
+            audio_name = ff.get_audio_name_from_path(path)
             audio_full = read_audio_file(path)[0];
-            if audio_full == None:
+            # If audio data failed to load, skip to next song
+            if audio_full == None: 
                 continue
+            # Parse audio data with data tools methods
+            audio_data = dt.load_data_from_song(audio_full)
+            # Save parsed data to numpy files for future use
+            if vd.save_uncompressed:
+                ff.save_data_to_file(audio_data[0], audio_name, False)
+            ff.save_data_to_file(audio_data[1], audio_name, True)
+            # Add compressed audio data to global list in var_data : (numpy_file_name, data)
+            vd.compressed_audio.append((audio_name[0], audio_data[1]))
+            # Clear large sized variables for memory
+            audio_data = None
+            audio_full = None
         else:
+            # Add compressed audio data to global list in var_data : (numpy_file_name, data)
             vd.compressed_audio.append((loaded_data[0], loaded_data[2]))  
-        
-        audio_list.append((path, read_audio_file(path)[0]));
+
+        # Sleep program to lessen process strain
         time.sleep(1)
-    return audio_list
+    return 1
 
 def read_audio_file(path):
     try:
