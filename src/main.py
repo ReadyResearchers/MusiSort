@@ -26,7 +26,7 @@ def main():
     if (input("\nIs this correct? (y/n): ")).lower() == "y":
         mst.load_audio_from_files(vd.songs_list)
         for info in vd.compressed_audio:
-            mst.view_data_array(info[1])
+            mst.view_data_array(info)
     else:
         print("\nGood day.")
         exit()

@@ -62,6 +62,6 @@ def read_audio_file(path):
         print("An error occured in loading an audio file : \n", repr(e))
         return None
         
-def view_data_array(array):
+def view_data_array(info):
     val = 0
-    print("\n\n", array, "\n\n")
+    print("\n\n", info[0], "\n", info[1], "\n\n")
