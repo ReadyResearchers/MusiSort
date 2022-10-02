@@ -30,7 +30,6 @@ def load_audio_from_files(paths):
         if loaded_data == None:
             # Get the file name of the song and audio data
             audio_name = ff.get_audio_name_from_path(path)
-            print(path)
             audio_read = read_audio_file(path);
             # If audio data failed to load, skip to next song
             if audio_read == None: 
@@ -43,7 +42,7 @@ def load_audio_from_files(paths):
                 ff.save_data_to_file(audio_data[0], audio_name, False)
             ff.save_data_to_file(audio_data[1], audio_name, True)
             # Add compressed audio data to global list in var_data : (numpy_file_name, data)
-            vd.compressed_audio.append((audio_name[0], audio_data[1]))
+            vd.compressed_audio.append((audio_name[2], audio_data[1]))
             # Clear large sized variables for memory
             audio_data = None
             audio_full = None
