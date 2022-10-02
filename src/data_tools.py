@@ -1,18 +1,9 @@
 import numpy as np
 import math
-
-# Set global variables
-#input_count = 100
-category_count = 10
-
-samples_before = 0
-last_peak = 0
-#sampleDivider = 100.0
-
-currentLevelSum = 0
+import var_data as vd
 
 # Used to store data from generate_peak_data for each song
-songs_info = []
+songs_info = [] # Deprecated --
 
 def load_data_from_songs(songs_data): # Deprecated --
     for info in songs_data:
@@ -26,17 +17,9 @@ def load_data_from_song(song):
     arraySum = generate_peak_summation(array)
     return (array, arraySum)
 
-def generate_peak_data2(song_data):
-    count = []
-    for index, sample in enumerate(song_data):
-        if(index > 200):
-            print(count)
-            return
-        count.append(sample)
-
 def generate_peak_data(song_path, song_data):
-    global samples_before
-    global last_peak
+    samples_before = 0
+    last_peak = 0
     # This function is used to gather the data from the waveform of a song
     
     # max will be used to divide all of the peak's values to equalize values between songs
@@ -60,7 +43,7 @@ def generate_peak_data(song_path, song_data):
             # for instance, a sound with a lot of buildup is more important than one with none,
             # therefore if a sound has many samples before it that aren't peaks, multiple the peak's
             # difference value more
-            peakDifference = sampleDifference * (1.0 + (samples_before / sampleDivider))
+            peakDifference = sampleDifference * (1.0 + (samples_before / vd.sampleDivider))
             # add difference and then reset variable values
             peak_data.append(peakDifference)
             last_peak = sample
@@ -70,7 +53,7 @@ def generate_peak_data(song_path, song_data):
     return (np.asarray(peak_data) / max)
             
 def generate_peak_summation(song_data):
-    global currentLevelSum
+    currentLevelSum = 0
     # This function uses the output from generate_peak_data to further condense the data for 
     # optimization during neural network training.
     
@@ -79,10 +62,10 @@ def generate_peak_summation(song_data):
     
     # These splices are what the neural network will use a training data
     length = len(song_data)
-    peaks_final = np.zeros(input_count)
-    peaksPerSum = (int) (length / input_count)
+    peaks_final = np.zeros(vd.input_count)
+    peaksPerSum = (int) (length / vd.input_count)
     for index, i in enumerate(range(0, length, peaksPerSum)):
-        if index >= input_count:
+        if index >= vd.input_count:
             return peaks_final
         for j in range(0, peaksPerSum, 1):
                 currentLevelSum += song_data[i + j]
