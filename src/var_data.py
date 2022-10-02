@@ -1,8 +1,10 @@
 # storage variables
 compressed_audio = []
+songs_list = []
 
 # settings variables
 save_uncompressed = True
+audio_formats = ["mp3", "ogg", "wav", "flac", "m4a", "aac", "webm", "opus"]
 
 # file_functions variables
 program_path = ""

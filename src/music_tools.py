@@ -11,8 +11,6 @@ import var_data as vd
 import file_functions as ff
 import data_tools as dt
 
-matplotlib.use('Agg') 
-
 if not sys.warnoptions:
     import warnings
     warnings.simplefilter("ignore")
