@@ -66,14 +66,3 @@ def read_audio_file(path):
 def view_data_array(array):
     val = 0
     print("\n\n", array, "\n\n")
-    #plt.figure()
-    # Generate plot2
-    #plt.plot(range(10, 20))
-    # Show the plot in non-blocking mode
-    #plt.show(block=False)
-
-    # Finally block main thread until all plots are closed
-    #plt.show()
-
-    #plt.plot(array, np.zeros_like(array) + val, 'x')
-    #plt.show()
