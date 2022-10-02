@@ -2,24 +2,29 @@ import numpy as np
 import math
 
 # Set global variables
-input_count = 100
+#input_count = 100
 category_count = 10
 
 samples_before = 0
 last_peak = 0
-sampleDivider = 100.0
+#sampleDivider = 100.0
 
 currentLevelSum = 0
 
 # Used to store data from generate_peak_data for each song
 songs_info = []
 
-def load_data_from_songs(songs_data):
+def load_data_from_songs(songs_data): # Deprecated --
     for info in songs_data:
         array = generate_peak_data(info[0], info[1])
         arraySum = generate_peak_summation(array)
         songs_info.append((info[0], arraySum))
     return songs_info
+
+def load_data_from_song(song):
+    array = generate_peak_data(song[0], song[1])
+    arraySum = generate_peak_summation(array)
+    return (array, arraySum)
 
 def generate_peak_data2(song_data):
     count = []
