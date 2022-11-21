@@ -1,4 +1,4 @@
-# AutoMusicSort
+# MusiSort : Using K-Means Clustering to automatically categorize digital music files.
 A tool used to automatically sort lists of music into similar categories.
 
 # Abstract
