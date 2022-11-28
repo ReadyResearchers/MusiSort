@@ -10,6 +10,7 @@ import time
 import var_data as vd
 import file_functions as ff
 import data_tools as dt
+import gc
 
 if not sys.warnoptions:
     import warnings
@@ -22,12 +23,15 @@ if not sys.warnoptions:
 #        time.sleep(1)
 #    return audio_list
 
-def load_audio_from_files(paths):
+def load_audio_from_files(paths, skip_new_load):
+    total = len(paths)
     for index, path in enumerate(paths):
+        if index % 50 == 0:
+            print("\nCompleted", index, "out of", total, "songs.")
         loaded_data = ff.load_local_data_file(path)
         
         # No numpy file was found for the song retrieved
-        if loaded_data == None:
+        if loaded_data == None and skip_new_load == False:
             # Get the file name of the song and audio data
             audio_name = ff.get_audio_name_from_path(path)
             audio_read = read_audio_file(path);
@@ -35,23 +39,27 @@ def load_audio_from_files(paths):
             if audio_read == None: 
                 continue
             audio_full = audio_read[0]
+            sample_rate = audio_read[1]
             # Parse audio data with data tools methods
-            audio_data = dt.load_data_from_song((path, audio_full))
+            audio_data = dt.load_data_from_song((sample_rate, audio_full))
             # Save parsed data to numpy files for future use
-            if vd.save_uncompressed:
-                ff.save_data_to_file(audio_data[0], audio_name, False)
-            ff.save_data_to_file(audio_data[1], audio_name, True)
+            ff.save_data_to_file(audio_data, audio_name)
             # Add compressed audio data to global list in var_data : (numpy_file_name, data)
-            vd.compressed_audio.append((audio_name[2], audio_data[1]))
+            vd.compressed_audio.append((audio_name[2], audio_data))
             # Clear large sized variables for memory
             audio_data = None
             audio_full = None
-        else:
+        elif loaded_data != None:
             # Add compressed audio data to global list in var_data : (numpy_file_name, data)
-            vd.compressed_audio.append((loaded_data[0], loaded_data[2]))  
+            title = loaded_data[0]
+            data = loaded_data[1]
+            vd.compressed_audio.append((title, data))  
 
         # Sleep program to lessen process strain
-        time.sleep(1)
+        if (loaded_data == None and skip_new_load == False) or index % 25 == 0:
+            time.sleep(1)
+            if (loaded_data == None and skip_new_load == False) and index % 10 == 0:
+                gc.collect()
     return 1
 
 def read_audio_file(path):

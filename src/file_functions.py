@@ -6,10 +6,9 @@ import numpy as np
 def create_project_directories(project_path):
     if os.path.exists(project_path + "/audio_data") == False:
         os.mkdir(project_path + "/audio_data")
-    if os.path.exists(project_path + "/" + vd.uncompressed_data_dir) == False:
-        os.mkdir(project_path + "/" + vd.uncompressed_data_dir)
-    if os.path.exists(project_path + "/" + vd.compressed_data_dir) == False:
-        os.mkdir(project_path + "/" + vd.compressed_data_dir)
+    for dir in vd.data_dirs:
+        if os.path.exists(project_path + "/" + dir) == False:
+            os.mkdir(project_path + "/" + dir)
         
 def get_audio_name_from_path(path):
     file_name = path
@@ -28,23 +27,21 @@ def load_local_data_file(path):
     audio_file_name = get_audio_name_from_path(path)
     
     saved_name = audio_file_name[2] + ".npy"
-    uncomp = ""
-    comp = ""
-    if os.path.exists(vd.program_path + "/" + vd.compressed_data_dir + "/" + saved_name):
-        if os.path.exists(vd.program_path + "/" + vd.uncompressed_data_dir + "/" + saved_name):
-            uncomp = vd.program_path + "/" + vd.uncompressed_data_dir + "/" + saved_name
-            comp = vd.program_path + "/" + vd.compressed_data_dir + "/" + saved_name
-            return (audio_file_name[2], np.load(uncomp), np.load(comp))
+    data = []
+    for dir in vd.data_dirs:
+        if os.path.exists(vd.program_path + "/" + dir + "/" + saved_name):
+            data.append(np.load(vd.program_path + "/" + dir + "/" + saved_name))
+        elif dir == "audio_data/prob" and vd.prob_dimension_analysis == False:
+            continue
         else:
-            comp = vd.program_path + "/" + vd.compressed_data_dir + "/" + saved_name
-            return (audio_file_name[2], np.array([]), np.load(comp))
-    return None
+            return None
+    return (audio_file_name[2], data)
          
-def save_data_to_file(data, name, is_compressed):
+def save_data_to_file(data, name):
     # Data must be a numpy array
-    path_choice = vd.compressed_data_dir if is_compressed else vd.uncompressed_data_dir
-    path_choice = vd.program_path + "/" + path_choice + "/" + name[2] + ".npy"
-    if os.path.exists(path_choice):
-        os.remove(path_choice)
-    np.save(path_choice, data)
+    for index, data_type in enumerate(data):
+        path_choice = vd.program_path + "/" + vd.data_dirs[index] + "/" + name[2] + ".npy"
+        if os.path.exists(path_choice):
+            os.remove(path_choice)
+        np.save(path_choice, data_type)
     

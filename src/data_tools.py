@@ -1,76 +1,69 @@
 import numpy as np
 import math
 import var_data as vd
+from sklearn.decomposition import PCA
+import librosa
 
-# Used to store data from generate_peak_data for each song
-songs_info = [] # Deprecated --
+def generate_peak_data(signal, sample_rate):
+    signal_copy = np.absolute(signal)
+    peak_list = ([], [], [], [])
+    peak_previous = 0
+    index_previous = 0
+    samples_before = 0
+    samples_after = 0
+    peakNum = 0
+    song_length = len(signal_copy)
+    for index, m in enumerate(signal_copy):
+        if index == 0 or index == song_length-1:
+            continue
+        before = signal_copy[index-1]
+        after = signal_copy[index+1]
+        if (before < m and after < m and m > 0) or (m < 0 and before > m and after > m):
+            peakNum += 1
+            if peakNum != 1:
+                peak_list[0].append(peak_previous)
+                peak_list[1].append(m)
+                peak_list[2].append(samples_before)
+                peak_list[3].append(samples_after)
+            peak_previous = m
+            index_previous = index + 1
+            samples_before = samples_after
+            samples_after = 0
+        else:
+            samples_after += 1
+    del peak_list[0][0]
+    del peak_list[1][0]
+    del peak_list[2][0]
+    del peak_list[3][0]
+    return peak_list
 
-def load_data_from_songs(songs_data): # Deprecated --
-    for info in songs_data:
-        array = generate_peak_data(info[0], info[1])
-        arraySum = generate_peak_summation(array)
-        songs_info.append((info[0], arraySum))
-    return songs_info
+def song_bounds(signal, sample_rate):
+    data = generate_peak_data(signal, sample_rate)
+    return np.asarray([np.amax(data[0]),np.amin(data[0]),np.amax(data[2]),np.amin(data[2])])
+            
+def mfcc_features(signal,sample_rate):
+    return np.asarray(np.mean(librosa.feature.mfcc(y=signal, sr=sample_rate, n_mfcc=20).T,axis=0).tolist())
+
+def pitch_chroma(signal, sample_rate):
+    return librosa.feature.chroma_stft(signal, sr=sample_rate)
+
+def probability_analysis(signal, sample_rate):
+    return 0
+    
+data_functions = [mfcc_features, pitch_chroma,song_bounds]
 
 def load_data_from_song(song):
     # Uncompressed
-    array = generate_peak_data(song[0], song[1])
-    # Compressed
-    arraySum = generate_peak_summation(array)
-    return (array, arraySum)
+    data = []
+    for func in data_functions:
+        array = func(song[1], song[0])
+        data.append(array)
+    if vd.prob_dimension_analysis:
+        data.append(probability_analysis(song[1], song[0]))
+    return data
 
-def generate_peak_data(song_path, song_data):
-    samples_before = 0
-    last_peak = 0
-    # This function is used to gather the data from the waveform of a song
-    
-    # max will be used to divide all of the peak's values to equalize values between songs
-    max = 0
-    length = len(song_data)
-    # peak_data holds the low and high peak's values of the waveform for further calculations
-    peak_data = []
-    # loop through all samples in the song
-    for index, sample in enumerate(song_data):
-        if abs(sample) > max:
-            max = (sample)
-        sampleB = 0 if index == 0 else song_data[index - 1]
-        sampleA = 0 if index + 1 >= length else song_data[index + 1]
-        # if the sample before and after are both higher or lower than the current sample,
-        # the current sample is a peak within the song's waveform
-        if((sampleB < sample and sampleA < sample) or (sampleB > sample and sampleA > sample)):
-            # without the -1*, traveling from a low peak to a high peak has the opposite sign
-            # sample difference is the distance between the last peak and the current
-            sampleDifference = -1 * (last_peak - sample)
-            # peak difference is the importance of the peak compared to the other peaks
-            # for instance, a sound with a lot of buildup is more important than one with none,
-            # therefore if a sound has many samples before it that aren't peaks, multiple the peak's
-            # difference value more
-            peakDifference = sampleDifference * (1.0 + (samples_before / vd.sampleDivider))
-            # add difference and then reset variable values
-            peak_data.append(peakDifference)
-            last_peak = sample
-            samples_before = 0
-        else:
-            samples_before += 1
-    return (np.asarray(peak_data) / max)
-            
-def generate_peak_summation(song_data):
-    currentLevelSum = 0
-    # This function uses the output from generate_peak_data to further condense the data for 
-    # optimization during neural network training.
-    
-    # The main idea behind the algorithm is to split the original dataset into splices, then
-    # add the values in these splices together to get a total change in a particular time frame
-    
-    # These splices are what the neural network will use a training data
-    length = len(song_data)
-    peaks_final = np.zeros(vd.input_count)
-    peaksPerSum = (int) (length / vd.input_count)
-    for index, i in enumerate(range(0, length, peaksPerSum)):
-        if index >= vd.input_count:
-            return peaks_final
-        for j in range(0, peaksPerSum, 1):
-                currentLevelSum += song_data[i + j]
-        peaks_final[index] = currentLevelSum
-        currentLevelSum = 0
-    return peaks_final
+def load_data_from_song_uncomp(array):
+    # Compressed
+    #arraySum = generate_peak_summation(array)
+    #return arraySum
+    return 0

@@ -7,11 +7,12 @@ import numpy as np
 import sys
 import var_data as vd
 import file_functions as ff
+import music_analysis as msa
 
 def initilize_program():
     vd.program_path = sys.path[0]
     ff.create_project_directories(vd.program_path)
-    vd.music_files_path = os.getcwd() + input("What folder should music be read in from? : ")
+    vd.music_files_path = os.getcwd() + input("\nWhat folder should music be read in from? : ")
 
 def main():
     print("The current directory is at :", os.getcwd())
@@ -24,9 +25,10 @@ def main():
             
     print("\nFound", len(vd.songs_list), "audio files within the folder!")
     if (input("\nIs this correct? (y/n): ")).lower() == "y":
-        mst.load_audio_from_files(vd.songs_list)
-        for info in vd.compressed_audio:
-            mst.view_data_array(info)
+        mst.load_audio_from_files(vd.songs_list, True)
+        #for info in vd.compressed_audio:
+            #mst.view_data_array(info)
+        msa.train_music_model()
     else:
         print("\nGood day.")
         exit()
