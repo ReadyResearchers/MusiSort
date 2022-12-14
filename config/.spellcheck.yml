@@ -3,5 +3,3 @@ matrix:
   aspell:
     lang: en
     d: en_US
-  sources:
-  - README.md
