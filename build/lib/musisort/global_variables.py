@@ -16,6 +16,9 @@ data_types_enabled = {}
 data_types_cluster_algorithm = {} # if not in here, use default algorithm
 audio_formats = ["mp3", "ogg", "wav", "flac", "m4a", "aac", "webm", "opus"]
 
+# General values
+debug_remove_iterations = 10
+
 def on_start():
     data_types.append("mel")
     data_types.append("pitch")

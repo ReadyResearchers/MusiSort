@@ -8,9 +8,9 @@ import scipy.interpolate as interp
 import glob
 import gc
 from musisort import global_variables
-from musisort import file_manager
+from musisort import file_manager, debug_manager
 
-def classify_songs(list_path, category_count):
+def classify_songs(list_path, category_count, debug=False):
     """Function used to classify list of songs into their own categories.
     Calls the categorization functions below according to the data type being read.
     
@@ -31,12 +31,18 @@ def classify_songs(list_path, category_count):
         return
     # If category count == -1, perform silhouette clustering.  Else, use category count for k
     songs = file_manager.get_songs(list_path)
+    if debug:
+        song_name = songs[0][0]
+        for i in range(1, global_variables.debug_remove_iterations+1, 1):
+            sub = int(100/global_variables.debug_remove_iterations) * i
+            songs.append(((song_name + str(sub)), songs[0][1]))
     
     # 2. Cluster data for each data type
     clustering_algorithm = get_nonsilo_labels if category_count != -1 else get_silo_labels
     clustering_simple_category_count = category_count if category_count != -1 else 10
     
     data_type_labels = np.zeros(shape=(len(data_types_enabled), len(songs)))
+    #data_type_clusters = {}
     
     for index, data_type in enumerate(data_types_enabled):
         # Decide on which clustering algorithm to use for data type
@@ -53,7 +59,12 @@ def classify_songs(list_path, category_count):
         # Gather song data to single array
         song_data = None
         for index2, song in enumerate(songs):
-            loaded_song = file_manager.load_song_data_file(data_type, song[0], song[1])
+            loaded_song = None
+            if debug and index2 > 0:
+                perc = int(100/global_variables.debug_remove_iterations) * index2
+                loaded_song = debug_manager.reduce_waveform(file_manager.load_song_data_file(data_type, songs[0][0], songs[0][1]), perc)
+            else:
+                loaded_song = file_manager.load_song_data_file(data_type, song[0], song[1])
             if shapeOfData == None:
                 shapeOfData = get_dimensions_shape(loaded_song, sizeInfo)
             if song_data is None:
@@ -68,7 +79,8 @@ def classify_songs(list_path, category_count):
             data_type_labels[index] = get_labels_simple(song_data, clustering_simple_category_count)[0]
             continue
         
-        data_type_labels[index] = clustering_algorithm(song_data, category_count)[0]
+        clustering_data = clustering_algorithm(song_data, category_count)
+        data_type_labels[index] = clustering_data[0]
         
         # Clear song_data array to save space
         song_data = None
@@ -109,10 +121,11 @@ def classify_songs(list_path, category_count):
             print(index_song, ":", song, ":", label)
             index_song = index_song + 1
         
-    file_manager.save_song_labels(song_values, list_path, category_count)
-    file_manager.save_song_centroids(final_combined_clusters, list_path, category_count)
+    if debug != True:
+        file_manager.save_song_labels(song_values, list_path, category_count)
+        file_manager.save_song_centroids(final_combined_clusters, list_path, category_count)
     
-    return song_values
+    return (song_values, final_combined_clusters, songs)
     
 def get_silo_labels(data, n):
     # n does nothing, just for parameter consistency

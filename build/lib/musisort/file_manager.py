@@ -286,7 +286,6 @@ def save_song_labels(classification_info, list_name, category_count):
     f = open(list_path_dir, "w")
     
     # Write new info to file
-    print(classification_info)
     for song in classification_info.keys():
         f.write(song + ":" + str(classification_info[song]))
         

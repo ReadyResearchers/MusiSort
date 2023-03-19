@@ -1,7 +1,7 @@
 """
 """
 
-from musisort import classification_manager, configuration_data, file_manager, global_variables
+from musisort import classification_manager, configuration_data, file_manager, global_variables, debug_manager
 
 command_descriptions = { \
     "help" : "Displays a list of all commands along with simple information about each one.", \
@@ -10,6 +10,7 @@ command_descriptions = { \
     "config" : "Displays and modifies the configuration values for the program.", \
     "analyze" : "Will analyze the songs not analyzed yet within the /all/songs directory.", \
     "classify" : "Will sort songs in list based on musical similarity after analyzation.", \
+    "debug" : "Used to view various results for debugging classification methods.", \
     "" : ""}
 
 command_arguments = { \
@@ -19,6 +20,7 @@ command_arguments = { \
     "config" : "<config_key> optional : <new_value>", \
     "analyze" : "", \
     "classify" : "<list_folder> <category_count>", \
+    "debug" : "<list_folder>", \
     "" : ""}
 
 commands = {}
@@ -67,12 +69,17 @@ def invoke_analyze(arguments):
     return
 
 def invoke_classify(arguments):
-    print(arguments)
     classification_manager.classify_songs(arguments[1], int(arguments[2]))
+    return
+
+def invoke_debug(arguments):
+    # song -1 == built in fake song
+    classification_info = classification_manager.classify_songs(arguments[1], 2, True)
+    debug_manager.debug(classification_info)
     return
 
 def on_start():
     global commands
     commands = {"help": print_help, "info" : print_info, "dir" : print_dir, \
                 "config" : invoke_config, "analyze" : invoke_analyze, \
-                "classify" : invoke_classify}
+                "classify" : invoke_classify, "debug" : invoke_debug}

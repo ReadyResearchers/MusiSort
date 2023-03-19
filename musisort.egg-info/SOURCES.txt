@@ -6,6 +6,7 @@ musisort/analysis_manager.py
 musisort/classification_manager.py
 musisort/command_manager.py
 musisort/configuration_data.py
+musisort/debug_manager.py
 musisort/file_manager.py
 musisort/global_variables.py
 musisort/main.py
