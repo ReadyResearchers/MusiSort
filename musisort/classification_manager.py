@@ -33,9 +33,9 @@ def classify_songs(list_path, category_count, debug=False):
     songs = file_manager.get_songs(list_path)
     if debug:
         song_name = songs[0][0]
-        for i in range(1, global_variables.debug_remove_iterations+1, 1):
-            sub = int(100/global_variables.debug_remove_iterations) * i
-            songs.append(((song_name + str(sub)), songs[0][1]))
+        for i in range(1, global_variables.debug_remove_iterations+1-global_variables.debug_iteration_minus, 1):
+            percent = int(100/global_variables.debug_remove_iterations) * i
+            songs.append(((song_name + "debug" + str(percent)), songs[0][1]))
     
     # 2. Cluster data for each data type
     clustering_algorithm = get_nonsilo_labels if category_count != -1 else get_silo_labels
@@ -59,12 +59,7 @@ def classify_songs(list_path, category_count, debug=False):
         # Gather song data to single array
         song_data = None
         for index2, song in enumerate(songs):
-            loaded_song = None
-            if debug and index2 > 0:
-                perc = int(100/global_variables.debug_remove_iterations) * index2
-                loaded_song = debug_manager.reduce_waveform(file_manager.load_song_data_file(data_type, songs[0][0], songs[0][1]), perc)
-            else:
-                loaded_song = file_manager.load_song_data_file(data_type, song[0], song[1])
+            loaded_song = file_manager.load_song_data_file(data_type, song[0], song[1])
             if shapeOfData == None:
                 shapeOfData = get_dimensions_shape(loaded_song, sizeInfo)
             if song_data is None:

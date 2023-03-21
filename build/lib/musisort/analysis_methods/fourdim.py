@@ -2,6 +2,8 @@
 """
 
 import numpy as np
+import librosa.display
+import matplotlib.pyplot as plt
 
 f_v = None
 
@@ -9,6 +11,8 @@ def create_grid(arrays):
     grid = np.asarray([1])
     for array in arrays:
         grid = np.multiply.outer(grid, array)
+    if np.max(grid) == 0 and np.min(grid) == 0:
+        return np.squeeze(grid)
     grid = grid / grid.sum()
     return np.squeeze(grid)
 
@@ -26,11 +30,17 @@ def get_peaks(song_waveform):
                 peaks.append([distance, difference])
             previous_peak_time = index
             previous_peak_amplitude = sample
+    if len(peaks) == 0:
+        max = np.max(song_waveform)
+        m = [0, 0]
+        peaks = [m,m,m,m,m,m,m,m,m,m,m,m,m,m,m,m,m,m,m,m]
     return np.asarray(peaks)
 
 def function(x, n, upper):
     max = x if x >= n else n
     min = n if x >= n else x
+    if max == 0 and min == 0:
+        return 0
     exponent = upper + (upper * -1 * (min / max))
     return x + ((n-x) * (1 - (1/((abs(n-x)+1)**(exponent)))))
 
@@ -44,6 +54,15 @@ def analyze(song_waveform, song_info):
     f_v = np.vectorize(function)
     split_count = 10
     song_data = song_waveform[0]
+
+    """y = song_waveform[0]
+    sr = song_waveform[1]
+    fig, ax = plt.subplots(nrows=3, sharex=True)
+    librosa.display.waveshow(y, sr=sr, ax=ax[0])
+    ax[0].set(title='Envelope view, mono')
+    ax[0].label_outer()
+    plt.show()"""
+    
     min_value = np.min(song_data)
     if min_value < 0:
         song_data = song_data + abs(min_value)
@@ -62,4 +81,6 @@ def analyze(song_waveform, song_info):
         differences_max.append(np.max(differences))
     arrays = (np.asarray(distances_mean),np.asarray(differences_mean),\
         np.asarray(distances_max),np.asarray(differences_max))
-    return np.ravel(create_grid(arrays))
+    arr_return = np.ravel(create_grid(arrays))
+    print("Nan? ", np.isnan(np.min(arr_return)))
+    return arr_return

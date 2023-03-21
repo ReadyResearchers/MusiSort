@@ -73,9 +73,7 @@ def invoke_classify(arguments):
     return
 
 def invoke_debug(arguments):
-    # song -1 == built in fake song
-    classification_info = classification_manager.classify_songs(arguments[1], 2, True)
-    debug_manager.debug(classification_info)
+    debug_manager.debug()
     return
 
 def on_start():

@@ -18,6 +18,7 @@ audio_formats = ["mp3", "ogg", "wav", "flac", "m4a", "aac", "webm", "opus"]
 
 # General values
 debug_remove_iterations = 10
+debug_iteration_minus = 1
 
 def on_start():
     data_types.append("mel")

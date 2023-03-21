@@ -14,6 +14,7 @@ import numpy as np
 # Where song lists are stored that are categorized and analyzied
 song_list_dir = "songlists"
 all_song_list_dir = song_list_dir + os.sep + "all"
+debug_song_list_dir = song_list_dir + os.sep + "debug"
 custom_song_list_dir = song_list_dir + os.sep + "custom"
 list_song_folder = "songs"
 list_categories_folder = "categories"
@@ -49,9 +50,11 @@ def generate_path_variables(user_data_dir):
     global data_type_dirs
     global configuration_dir
     global info_type_dir
+    global debug_song_list_dir
     
     song_list_dir = os.path.join(user_data_dir, song_list_dir)
     all_song_list_dir = song_list_dir + os.sep + "all"
+    debug_song_list_dir = song_list_dir + os.sep + "debug"
     custom_song_list_dir = song_list_dir + os.sep + "custom"
     
     song_data_dir = os.path.join(user_data_dir, song_data_dir)
@@ -87,6 +90,14 @@ def confirm_paths_exist(user_data_dir):
     if not os.path.exists(os.path.join(all_song_list_dir, list_categories_folder)):
         os.mkdir(os.path.join(all_song_list_dir, list_categories_folder))
         
+    # Debug songs list folder tree
+    if not os.path.exists(debug_song_list_dir):
+        os.mkdir(debug_song_list_dir)
+    if not os.path.exists(os.path.join(debug_song_list_dir, list_song_folder)):
+        os.mkdir(os.path.join(debug_song_list_dir, list_song_folder))
+    if not os.path.exists(os.path.join(debug_song_list_dir, list_categories_folder)):
+        os.mkdir(os.path.join(debug_song_list_dir, list_categories_folder))
+        
     # Custom song lists folder tree
     if not os.path.exists(custom_song_list_dir):
         os.mkdir(custom_song_list_dir)
@@ -115,6 +126,10 @@ def print_directory_list():
     
     print("All Songs List Folder : ", all_song_list_dir, "\n")
     print("\tSongs Folder ::", os.path.join(all_song_list_dir, list_song_folder), "\n")
+    
+    
+    print("Debug Songs List Folder : ", debug_song_list_dir, "\n")
+    print("\tSongs Folder ::", os.path.join(debug_song_list_dir, list_song_folder), "\n")
     
     print("Custom Song Lists Folder : ", custom_song_list_dir, "\n")
     print("\tCustom Lists Song Folders : \n")
@@ -175,8 +190,12 @@ def get_songs(list_name):
     global loaded_song_names
     
     song_count = 0
-    song_dir_list = os.path.join(all_song_list_dir, list_song_folder, ("*.")) if list_name == "all"\
-        else os.path.join(custom_song_lists[list_name], list_song_folder, ("*."))
+    song_dir_list = ""
+    if list_name == "debug":
+        song_dir_list = os.path.join(debug_song_list_dir, list_song_folder, ("*."))
+    else:
+        song_dir_list = os.path.join(all_song_list_dir, list_song_folder, ("*.")) if list_name == "all"\
+            else os.path.join(custom_song_lists[list_name], list_song_folder, ("*."))
     song_max_count = len(glob.glob(song_dir_list + "*"))
     songs = []
     
@@ -281,8 +300,10 @@ Functions that deal with saving classification information.
 
 def save_song_labels(classification_info, list_name, category_count):
     list_path_dir = os.path.join(all_song_list_dir, list_categories_folder, ("labels_" + str(category_count) + ".txt"))
-    if list_name != "all":
+    if list_name != "all" and list_name != "debug":
         list_path_dir = os.path.join(custom_song_lists[list_name], list_categories_folder, ("labels_" + str(category_count) + ".txt"))
+    elif list_name == "debug":
+        list_path_dir = os.path.join(debug_song_list_dir, list_categories_folder, ("labels_" + str(category_count) + ".txt"))
     f = open(list_path_dir, "w")
     
     # Write new info to file
@@ -294,8 +315,10 @@ def save_song_labels(classification_info, list_name, category_count):
     
 def load_song_labels(list_name, category_count):
     list_path_dir = os.path.join(all_song_list_dir, list_categories_folder, ("labels_" + str(category_count) + ".txt"))
-    if list_name != "all":
+    if list_name != "all" and list_name != "debug":
         list_path_dir = os.path.join(custom_song_lists[list_name], list_categories_folder, ("labels_" + str(category_count) + ".txt"))
+    elif list_name == "debug":
+        list_path_dir = os.path.join(all_song_list_dir, list_categories_folder, ("labels_" + str(category_count) + ".txt"))
     f = open(list_path_dir, "r")
     lines = f.readlines()
     
@@ -310,8 +333,11 @@ def load_song_labels(list_name, category_count):
     
 def save_song_centroids(centroid_info, list_name, category_count):
     list_path_dir = os.path.join(all_song_list_dir, list_categories_folder, ("centroids_" + str(category_count) + ".npy"))
-    if list_name != "all":
+    if list_name != "all"and list_name != "debug":
         list_path_dir = os.path.join(custom_song_lists[list_name], list_categories_folder, ("centroids_" + str(category_count) + ".npy"))
+    elif list_name == "debug":
+        list_path_dir = os.path.join(debug_song_list_dir, list_categories_folder, ("centroids_" + str(category_count) + ".npy"))
+    
     if os.path.exists(list_path_dir):
         os.remove(list_path_dir)
     np.save(list_path_dir, centroid_info)
@@ -319,9 +345,11 @@ def save_song_centroids(centroid_info, list_name, category_count):
 def load_song_centroids(list_name, category_count):
     # Parse file name and file extension from file path
     list_path_dir = os.path.join(all_song_list_dir, list_categories_folder, ("centroids_" + str(category_count) + ".npy"))
-    if list_name != "all":
+    if list_name != "all"and list_name != "debug":
         list_path_dir = os.path.join(custom_song_lists[list_name], list_categories_folder, ("centroids_" + str(category_count) + ".npy"))
-    
+    elif list_name == "debug":
+        list_path_dir = os.path.join(debug_song_list_dir, list_categories_folder, ("centroids_" + str(category_count) + ".npy"))
+        
     if os.path.exists(list_path_dir):
         return np.load(list_path_dir)
     return None
