@@ -13,7 +13,7 @@ def create_grid(arrays):
         grid = np.multiply.outer(grid, array)
     if np.max(grid) == 0 and np.min(grid) == 0:
         return np.squeeze(grid)
-    grid = grid / grid.sum()
+    grid = grid / grid.sum() # May cause issues if grid.sum == 0
     return np.squeeze(grid)
 
 def get_peaks(song_waveform):
@@ -82,5 +82,4 @@ def analyze(song_waveform, song_info):
     arrays = (np.asarray(distances_mean),np.asarray(differences_mean),\
         np.asarray(distances_max),np.asarray(differences_max))
     arr_return = np.ravel(create_grid(arrays))
-    print("Nan? ", np.isnan(np.min(arr_return)))
     return arr_return

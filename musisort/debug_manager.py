@@ -23,8 +23,6 @@ def delete_percent(array, percent):
             changed = changed + 1
             count = count + iter
             array_copy[index] = 0
-    print("\n", percent, " Changed = ", changed, " : ", size, " : ", (changed/size), " : ", \
-        (len(array_copy) - np.count_nonzero(array_copy)), " / ", (len(array) - np.count_nonzero(array)))
     return array_copy
 
 def reduce_waveform(waveform, percentage):
@@ -49,7 +47,7 @@ def debug():
     song_path = os.path.join(file_manager.debug_song_list_dir, file_manager.list_song_folder, (songs[0][0] + "." + songs[0][1]))
     loaded_song_waveform = analysis_manager.load_song_waveform(song_path)
     # loop through x times (percentage_iterations) creating new waveform with percentage removed
-    bar = Bar('Generating Debug Data', max=global_variables.debug_remove_iterations)
+    bar = Bar('Generating Debug Data', max=(global_variables.debug_remove_iterations-global_variables.debug_iteration_minus))
     
     for iteration in range(1, global_variables.debug_remove_iterations+1-global_variables.debug_iteration_minus, 1):
         percent = int(100/global_variables.debug_remove_iterations) * iteration
@@ -65,6 +63,7 @@ def debug():
         time.sleep(1)
             
     bar.finish()
+    print("\n")
     # -> Make classify load these songs if debug set to True
     classification_info = classification_manager.classify_songs("debug", 2, True)
-    print(classification_info)
+    print("\nClassification Info Condensed: \n", classification_info)
