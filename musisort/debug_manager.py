@@ -63,7 +63,68 @@ def debug():
         time.sleep(1)
             
     bar.finish()
-    print("\n")
+    
     # -> Make classify load these songs if debug set to True
-    classification_info = classification_manager.classify_songs("debug", 2, True)
-    print("\nClassification Info Condensed: \n", classification_info)
+    cluster_frequency = {}
+    
+    name = songs[0][0] + "." + songs[0][1]
+    classification_amount = 100
+    bar2 = Bar('Classifying Debug Data', max=classification_amount)
+    for classification_current in range(classification_amount):
+        classification_info = classification_manager.classify_songs("debug", 2, True)
+        
+        song_label_info = classification_info[0]
+        centroids = classification_info[1]
+        song_file_info = classification_info[2]
+        
+        song_label = song_label_info[name]
+        for title in song_label_info.keys():
+            label = song_label_info[title]
+            if classification_current == 0:
+                #print(title)
+                if title != name:
+                    cluster_frequency[title] = 0
+            if label == song_label and title != name:
+                cluster_frequency[title] = cluster_frequency[title] + 1
+        bar2.next()
+            
+    bar2.finish()
+    
+    # data_type , {song_title, distance_from_original}
+    distance_calculations = {}
+    data_types_tested = ""
+    
+    for data_type in global_variables.data_types_enabled.keys():
+        if global_variables.data_types_enabled[data_type]:
+            data_types_tested = data_types_tested + data_type + ", "
+            original_data = file_manager.load_song_data_file(data_type, songs[0][0], songs[0][1])
+            distance_calculations[data_type] = {}
+            for iteration in range(1, global_variables.debug_remove_iterations+1-global_variables.debug_iteration_minus, 1):
+                percent = int(100/global_variables.debug_remove_iterations) * iteration
+                modified_song_name = songs[0][0] + "debug" + str(percent)
+                loaded_song = file_manager.load_song_data_file(data_type, modified_song_name, songs[0][1])
+                distance_calculations[data_type][modified_song_name] = np.linalg.norm(original_data-loaded_song)
+                loaded_song = None
+                gc.collect()
+                
+    print(global_variables.header_seperator)
+                
+    print("\nAnalysis Methods Tested : " + data_types_tested + "\n")
+    
+    print(global_variables.header_seperator)
+    
+    print("\nChance to be in Same Cluster as Original Song Waveform:\n")
+    for title in cluster_frequency.keys():
+        print(title + " : " + str(cluster_frequency[title]) + "%")
+        
+    print(global_variables.header_seperator)
+        
+    print("\nModified Waveform Distances from Original Waveform by Analysis Method: ")
+    for data_type in distance_calculations.keys():
+        print("\nAnalysis Method Type =", data_type, ":")
+        print("----------------------")
+        for title in distance_calculations[data_type].keys():
+            print(title, " : ", distance_calculations[data_type][title])
+            
+    print("\n" + global_variables.header_seperator)
+    #print("\nClassification Info Condensed: \n", classification_info)

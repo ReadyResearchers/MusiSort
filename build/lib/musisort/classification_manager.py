@@ -23,6 +23,7 @@ def classify_songs(list_path, category_count, debug=False):
     # 1. Load enabled data types for processing
     data_types_enabled = []
     for data_type in global_variables.data_types_enabled.keys():
+        #print(data_type, " : ", global_variables.data_types_enabled[data_type])
         if global_variables.data_types_enabled[data_type]:
             data_types_enabled.append(data_type)
             
@@ -110,13 +111,13 @@ def classify_songs(list_path, category_count, debug=False):
         song_values_sorted[label].append(song)
         song_values[song] = label
         
-    index_song = 1
-    for label in song_values_sorted.keys():
-        for song in song_values_sorted[label]:
-            print(index_song, ":", song, ":", label)
-            index_song = index_song + 1
-        
     if debug != True:
+        index_song = 1
+        for label in song_values_sorted.keys():
+            for song in song_values_sorted[label]:
+                print(index_song, ":", song, ":", label)
+                index_song = index_song + 1
+                
         file_manager.save_song_labels(song_values, list_path, category_count)
         file_manager.save_song_centroids(final_combined_clusters, list_path, category_count)
     

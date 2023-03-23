@@ -41,16 +41,17 @@ def read_config_file():
     lines = f.readlines()
     
     for index, line in enumerate(lines):
+        lineReplaced = line.replace("\n", "")
         # Analysis methods enabled check
         if(index < 4):
-            split_line = line.split(":")
+            split_line = lineReplaced.split(":")
             data_type = split_line[0]
-            enabled = bool(split_line[1])
+            enabled = (split_line[1] == 'True')
             global_variables.data_types_enabled[data_type] = enabled
         else:
-            split_line = line.split(":")
+            split_line = lineReplaced.split(":")
             if index == 4:
-                global_variables.debug_mode = bool(split_line[1])
+                global_variables.debug_mode = bool(split_line[1] == 'True')
     
     f.close()
 
