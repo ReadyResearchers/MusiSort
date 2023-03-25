@@ -115,16 +115,41 @@ def debug():
     
     print("\nChance to be in Same Cluster as Original Song Waveform:\n")
     for title in cluster_frequency.keys():
-        print(title + " : " + str(cluster_frequency[title]) + "%")
+        percent_changed = int(title[title.rindex("debug")+5:title.rindex(".")])
+        print(str(percent_changed) + " %" + " changed: " + str(cluster_frequency[title]) + "%")
         
     print(global_variables.header_seperator)
+    
+    distance_accuracies = {}
         
     print("\nModified Waveform Distances from Original Waveform by Analysis Method: ")
     for data_type in distance_calculations.keys():
         print("\nAnalysis Method Type =", data_type, ":")
         print("----------------------")
+        distance_accuracies_inside = {}
+        min = 999999
         for title in distance_calculations[data_type].keys():
-            print(title, " : ", distance_calculations[data_type][title])
+            percent_changed = int(title[title.rindex("debug")+5:len(title)])
+            if percent_changed < min:
+                min = percent_changed
+            distance = distance_calculations[data_type][title]
+            print(percent_changed, "%","changed: distance = ", distance)
+            distance_accuracies_inside[percent_changed] = distance
+        in_place = 0
+        for i in range(min, 100, min):
+            #print(str(i))
+            if i in distance_accuracies_inside.keys():
+                distance = distance_accuracies_inside[i]
+                below = -99999999
+                above = 99999999
+                if i != min:
+                    below = distance_accuracies_inside[i-min]
+                if (i+min) in distance_accuracies_inside.keys():
+                    above = distance_accuracies_inside[i+min]
+                if distance < above and distance > below:
+                    in_place = in_place + 1
+        distance_accuracies[data_type] = in_place
+        print("\nIn place =", in_place)
             
     print("\n" + global_variables.header_seperator)
     #print("\nClassification Info Condensed: \n", classification_info)

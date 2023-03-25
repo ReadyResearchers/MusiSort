@@ -7,6 +7,7 @@ import scipy.interpolate as interp
 
 import glob
 import gc
+import time
 from musisort import global_variables
 from musisort import file_manager, debug_manager
 
@@ -120,7 +121,7 @@ def classify_songs(list_path, category_count, debug=False):
                 
         file_manager.save_song_labels(song_values, list_path, category_count)
         file_manager.save_song_centroids(final_combined_clusters, list_path, category_count)
-    
+
     return (song_values, final_combined_clusters, songs)
     
 def get_silo_labels(data, n):

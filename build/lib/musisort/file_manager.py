@@ -157,6 +157,7 @@ def load_songs():
     song_count = 0
     song_max_count = len(glob.glob( os.path.join(all_song_list_dir, list_song_folder, "*.*")))
     bar = Bar('Processing Songs', max=song_max_count)
+    time_now = time.time()
     
     for audio_format in global_variables.audio_formats:
         for song in sorted(glob.glob( os.path.join(all_song_list_dir, list_song_folder, ("*." + audio_format)) )):
@@ -170,7 +171,7 @@ def load_songs():
             analysis_manager.analyze_song(song, name[0], name[1])
             
             # Asyncing for stopping crashes
-            if song_count % 25 == 0:
+            if song_count % 27 == 0:
                 time.sleep(1)
             if song_count % 10 == 0:
                 # Remove large leftover song data arrays before they fill up memory
@@ -179,6 +180,8 @@ def load_songs():
             bar.next()
             
     bar.finish()
+    
+    print("time = ", (time.time() - time_now))
     # For debugging :
     #for index, element in enumerate(loaded_songs_paths.keys()):
     #    print(loaded_songs_paths[element] + "  :::  " + element)

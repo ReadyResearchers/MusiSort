@@ -170,7 +170,7 @@ def load_songs():
             analysis_manager.analyze_song(song, name[0], name[1])
             
             # Asyncing for stopping crashes
-            if song_count % 25 == 0:
+            if song_count % 27 == 0:
                 time.sleep(1)
             if song_count % 10 == 0:
                 # Remove large leftover song data arrays before they fill up memory
@@ -179,6 +179,7 @@ def load_songs():
             bar.next()
             
     bar.finish()
+    
     # For debugging :
     #for index, element in enumerate(loaded_songs_paths.keys()):
     #    print(loaded_songs_paths[element] + "  :::  " + element)

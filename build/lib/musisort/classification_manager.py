@@ -7,10 +7,12 @@ import scipy.interpolate as interp
 
 import glob
 import gc
+import time
 from musisort import global_variables
 from musisort import file_manager, debug_manager
 
 def classify_songs(list_path, category_count, debug=False):
+    time_now = time.time()
     """Function used to classify list of songs into their own categories.
     Calls the categorization functions below according to the data type being read.
     
@@ -120,6 +122,8 @@ def classify_songs(list_path, category_count, debug=False):
                 
         file_manager.save_song_labels(song_values, list_path, category_count)
         file_manager.save_song_centroids(final_combined_clusters, list_path, category_count)
+        
+    print("time = ", (time.time()-time_now))
     
     return (song_values, final_combined_clusters, songs)
     
