@@ -6,7 +6,7 @@ Downloading music is done by many different people for many different reasons, w
 
 # Description and Thesis
 
-MusiSort is a tool being developed to collect music and put them into similar groups or clusters based on their waveform.  The program uses artifical intelligence to check similarities and differences between the different songs.  The main goal of the project is to create a tool which removes the need to manually sort music into different genres as this can be quite a difficult, and tedious, task.  
+MusiSort is a tool being developed to collect music and put them into similar groups or clusters based on their waveform.  The program uses artificial intelligence to check similarities and differences between the different songs.  The main goal of the project is to create a tool which removes the need to manually sort music into different genres as this can be quite a difficult, and tedious, task.  
 
 Thesis : https://github.com/ReadyResearchers/cmpsc-600-fall-2022-and-spring-2023-senior-thesis-gvanzin-allegheny
 
@@ -17,6 +17,8 @@ As MusiSort is a pip tool, it can be easily installed with the help of Python an
 `pip install musisort`
 
 MusiSort files are stored under the user directory as `musisort`.  For instance, on windows, `C:\\Users\\ComputerName\\AppData\\Local\\user\\musisort`.
+
+To upgrade MusiSort to its latest version, run the command `pip install --upgrade musisort`.
 
 # Usage
 
@@ -51,7 +53,7 @@ There are a total of 7 different commands currently available to use in musisort
 1. Open terminal and run the command `musisort dir`.  Go to the directory located under the `All Songs List Folder` called `Songs Folder`.  An example of this path on Linux would be : `/home/user/.local/share/musisort/songlists/all/songs`.
 2. Add all songs you want to sort into this folder.
 3. Run `musisort analyze`.  The first time this is run, it will go through every song and gather data about it.  Everytime you add a new song to `all/songs`, this command will need to be run again to analyze the newly added songs.
-4. After the analyzation is completed, run `musisort classify <song_list> <catergory_count>`.  For this example, we will use `musisort classify all 5`.  Since our songs are located in the directory `songlists/all/songs`, the list name is `all` as that is the name of the folder the songs are located in.  The 5 means we will be categories ranging from 0 to 4 returned to use for each song.  If the value -1 is used for the `category_count` argument, the program will attempt to automatically assign a number of categories.  Once the program has finished classification, it will display the categories to the console in a list as so:
+4. After the analysis is completed, run `musisort classify <song_list> <catergory_count>`.  For this example, we will use `musisort classify all 5`.  Since our songs are located in the directory `songlists/all/songs`, the list name is `all` as that is the name of the folder the songs are located in.  The 5 means we will have categories ranging from 0 to 4 returned to us for each song.  If the value -1 is used for the `category_count` argument, the program will attempt to automatically assign a number of categories.  Once the program has finished classification, it will display the categories to the console in a list as so:
 
 ![Screenshot from 2023-04-0934754 15-12-33](https://user-images.githubusercontent.com/54772966/230233534-506b809e-8f1f-4231-9905-58c659328a55.png)
 
@@ -61,7 +63,7 @@ https://drive.google.com/drive/folders/1kCke4O5IVPndeUuDvmzUe2n7M6pokksR?usp=sha
 
 The folder containing data is split into two sections.  The folder `Accuracy Song` contains the audio file used to test the program using the `musisort debug` command.  To use the debug command using this file, drag the song located in the folder into the `songlists\debug\songs` folder in the MusiSort directory.  Then you can run `musisort debug` to get data related to the accuracy of the classification and analysis methods.
 
-Inside the `Efficiency Data` folder, 4 different zip files contain 1, 5, 10, and 25 songs.  The speed of the program was determined by placing various `sys.time` checks within the code of MusiSort and running the program with these set amount of audio files.  This can be done by cloning the MusiSort repository, and then running `pip install .` or `pip install --upgrade .` in the cloned directory when adding time checks in the locally stored code.
+Inside the `Efficiency Data` folder, 4 different zip files contain 1, 5, 10, and 25 songs.  The speed of the program was determined by placing various `sys.time` checks within the code of MusiSort and running the program with these set amounts of audio files.  This can be done by cloning the MusiSort repository, and then running `pip install .` or `pip install --upgrade .` in the cloned directory when adding time checks in the locally stored code.
 
 # Current Development State
 
@@ -97,7 +99,7 @@ Jiang, Yanru & Jin, Xin. (2022). Using k-Means Clustering to Classify Protest So
 
 https://www.researchgate.net/publication/361335249_Using_k-Means_Clustering_to_Classify_Protest_Songs_Based_on_Conceptual_and_Descriptive_Audio_Features
 
-Kim, Kyuwon, et al. “Clustering Music by Genres Using Supervised and Unsupervised Algorithms.” Standford, pp. 1–5. 
+Kim, Kyuwon, et al. “Clustering Music by Genres Using Supervised and Unsupervised Algorithms.” Stanford, pp. 1–5. 
 
 https://cs229.stanford.edu/proj2015/129_report.pdf
 
