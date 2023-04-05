@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: musisort
-Version: 0.0.1
+Version: 1.0.1
 Summary: Automatic Music Categorization Tool
 Home-page: https://github.com/ReadyResearchers/AutoMusicSort
 Author: Garrison Vanzin
@@ -8,7 +8,7 @@ Author-email: vanzing@allegheny.edu
 License: MIT License
 Keywords: musisort
 Platform: UNKNOWN
-Classifier: Development Status :: 1 - Planning
+Classifier: Development Status :: 6 - Stage 2
 License-File: LICENSE
 
 UNKNOWN
