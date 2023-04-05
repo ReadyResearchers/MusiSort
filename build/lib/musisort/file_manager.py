@@ -68,51 +68,51 @@ def generate_path_variables(user_data_dir):
 def confirm_paths_exist(user_data_dir):
     # Top level folders in tree
     if not os.path.exists(user_data_dir):
-        os.mkdir(user_data_dir)
+        os.makedirs(user_data_dir)
     if not os.path.exists(song_list_dir):
-        os.mkdir(song_list_dir)
+        os.makedirs(song_list_dir)
         
     # Song data folder tree
     if not os.path.exists(song_data_dir):
-        os.mkdir(song_data_dir)
+        os.makedirs(song_data_dir)
     if not os.path.exists(info_type_dir):
-        os.mkdir(info_type_dir)
+        os.makedirs(info_type_dir)
     for data_type in data_type_dirs.keys():
         data_path = data_type_dirs[data_type]
         if not os.path.exists(data_path):
-            os.mkdir(data_path)
+            os.makedirs(data_path)
         
     # All songs list folder tree
     if not os.path.exists(all_song_list_dir):
-        os.mkdir(all_song_list_dir)
+        os.makedirs(all_song_list_dir)
     if not os.path.exists(os.path.join(all_song_list_dir, list_song_folder)):
-        os.mkdir(os.path.join(all_song_list_dir, list_song_folder))
+        os.makedirs(os.path.join(all_song_list_dir, list_song_folder))
     if not os.path.exists(os.path.join(all_song_list_dir, list_categories_folder)):
-        os.mkdir(os.path.join(all_song_list_dir, list_categories_folder))
+        os.makedirs(os.path.join(all_song_list_dir, list_categories_folder))
         
     # Debug songs list folder tree
     if not os.path.exists(debug_song_list_dir):
-        os.mkdir(debug_song_list_dir)
+        os.makedirs(debug_song_list_dir)
     if not os.path.exists(os.path.join(debug_song_list_dir, list_song_folder)):
-        os.mkdir(os.path.join(debug_song_list_dir, list_song_folder))
+        os.makedirs(os.path.join(debug_song_list_dir, list_song_folder))
     if not os.path.exists(os.path.join(debug_song_list_dir, list_categories_folder)):
-        os.mkdir(os.path.join(debug_song_list_dir, list_categories_folder))
+        os.makedirs(os.path.join(debug_song_list_dir, list_categories_folder))
         
     # Custom song lists folder tree
     if not os.path.exists(custom_song_list_dir):
-        os.mkdir(custom_song_list_dir)
+        os.makedirs(custom_song_list_dir)
     custom_lists = next(os.walk(custom_song_list_dir))[1]
     for custom_list in custom_lists:
         list_dir = os.path.join(custom_song_list_dir, custom_list)
         custom_song_lists[custom_list] = list_dir
         if not os.path.exists(os.path.join(list_dir, list_song_folder)):
-            os.mkdir(os.path.join(list_dir, list_song_folder))
+            os.makedirs(os.path.join(list_dir, list_song_folder))
         if not os.path.exists(os.path.join(list_dir, list_categories_folder)):
-            os.mkdir(os.path.join(list_dir, list_categories_folder))
+            os.makedirs(os.path.join(list_dir, list_categories_folder))
             
     # Configuration folder tree
     if not os.path.exists(configuration_dir):
-        os.mkdir(configuration_dir)
+        os.makedirs(configuration_dir)
             
 def print_directory_list():
     print(global_variables.header_seperator, "\n")
@@ -157,7 +157,6 @@ def load_songs():
     song_count = 0
     song_max_count = len(glob.glob( os.path.join(all_song_list_dir, list_song_folder, "*.*")))
     bar = Bar('Processing Songs', max=song_max_count)
-    time_now = time.time()
     
     for audio_format in global_variables.audio_formats:
         for song in sorted(glob.glob( os.path.join(all_song_list_dir, list_song_folder, ("*." + audio_format)) )):
@@ -181,7 +180,6 @@ def load_songs():
             
     bar.finish()
     
-    print("time = ", (time.time() - time_now))
     # For debugging :
     #for index, element in enumerate(loaded_songs_paths.keys()):
     #    print(loaded_songs_paths[element] + "  :::  " + element)
