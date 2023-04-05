@@ -22,6 +22,6 @@ setup(
                       ],
 
     classifiers=[
-        'Development Status :: 6 - Stage 2',
+        'Development Status :: 1 - Planning',
     ],
 )
