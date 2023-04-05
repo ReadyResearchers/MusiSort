@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='musisort',
-    version='0.0.1',    
+    version='1.0.1',    
     description='Automatic Music Categorization Tool',
     url='https://github.com/ReadyResearchers/AutoMusicSort',
     author='Garrison Vanzin',
@@ -22,6 +22,6 @@ setup(
                       ],
 
     classifiers=[
-        'Development Status :: 1 - Planning',
+        'Development Status :: 6 - Stage 2',
     ],
 )
