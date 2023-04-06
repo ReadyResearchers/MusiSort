@@ -16,10 +16,10 @@ def classify_songs(list_path, category_count, debug=False):
     Calls the categorization functions below according to the data type being read.
     
     Basic Logic of function is as follows:
-    1. Read necessary data
-    2. Load data from files and call classify functions using it
-    3. Unify the labels in the individual label lists into one single label for each song
-    4. Save labels for songs into a file as well as the centroids created
+    1. Read necessary data.
+    2. Load data from files and call classify functions using it.
+    3. Unify the labels in the individual label lists into one single label for each song.
+    4. Save labels for songs into a file as well as the centroids created.
     """
     # 1. Load enabled data types for processing
     data_types_enabled = []

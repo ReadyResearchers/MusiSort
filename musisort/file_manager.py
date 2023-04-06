@@ -20,7 +20,7 @@ list_song_folder = "songs"
 list_categories_folder = "categories"
 custom_song_lists = {} # listname : custom_song_list_dir + sep + listname
 
-# Where the data gathered from analysis methods are stored
+# Where the data gathered from analysis methods are stored.
 song_data_dir = "songdata"
 info_type_dir = "info"
 data_type_dirs = {}
