@@ -20,7 +20,7 @@ list_song_folder = "songs"
 list_categories_folder = "categories"
 custom_song_lists = {} # listname : custom_song_list_dir + sep + listname
 
-# Where the data gathered from analysis methods are stored
+# Where the data gathered from analysis methods are stored.
 song_data_dir = "songdata"
 info_type_dir = "info"
 data_type_dirs = {}
@@ -215,8 +215,8 @@ def get_songs(list_name):
 def get_audio_name_from_path(path):
     file_name = path
     ext = ""
-    if file_name.rfind("/") != -1:
-        file_name = file_name[file_name.rfind("/")+1 : len(file_name)]
+    if file_name.rfind(os.sep) != -1:
+        file_name = file_name[file_name.rfind(os.sep)+1 : len(file_name)]
     if file_name.rfind(".") != -1:
         ext = file_name[file_name.rfind(".")+1 : len(file_name)]
         file_name = file_name[0 : file_name.rfind(".")]
@@ -234,6 +234,7 @@ def load_song_data_file(data_type, song_file_name, song_file_ext):
          
 def save_song_data_file(data_type, song_file_name, song_file_ext, data):
     data_file_path = os.path.join(song_data_dir, data_type, (song_file_name + "-" + song_file_ext + ".npy"))
+    
     if os.path.exists(data_file_path):
         os.remove(data_file_path)
     np.save(data_file_path, data)
@@ -305,11 +306,11 @@ def save_song_labels(classification_info, list_name, category_count):
         list_path_dir = os.path.join(custom_song_lists[list_name], list_categories_folder, ("labels_" + str(category_count) + ".txt"))
     elif list_name == "debug":
         list_path_dir = os.path.join(debug_song_list_dir, list_categories_folder, ("labels_" + str(category_count) + ".txt"))
-    f = open(list_path_dir, "w")
+    f = open(list_path_dir, "w", encoding="utf-8")
     
     # Write new info to file
     for song in classification_info.keys():
-        f.write(song + ":" + str(classification_info[song]))
+        f.write(song + ":" + str(int(classification_info[song])) + "\n")
         
     f.close()
     return

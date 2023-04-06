@@ -24,7 +24,7 @@ def analyze_song(path_to_song, song_file_name, song_file_ext):
     song_loaded = False
     data_file_name = song_file_name + "-" + song_file_ext + ".npy"
     for data_type in global_variables.data_types:
-        # If analysis type disabled, skip step
+        # If analysis type disabled, skip step.
         if global_variables.data_types_enabled[data_type] == False:
             continue
         
