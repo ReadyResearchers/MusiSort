@@ -57,6 +57,8 @@ There are a total of 7 different commands currently available to use in musisort
 
 ![Screenshot from 2023-04-0934754 15-12-33](https://user-images.githubusercontent.com/54772966/230233534-506b809e-8f1f-4231-9905-58c659328a55.png)
 
+If using the windows command prompt, unicode will not display in the final classification output.  Rather than viewing results in the command prompt, you can view the results in the categories folder for the list.  The category folder for the `all` list is located in the MusiSort directory `./musisort/songlists/all/categories`.  The list of labels can be viewed by opening the text files named `labels_n.txt`, with n referring to the amount of labels classified, within the folder using a text editor that supports unicode.
+
 **Data Used for Testing**
 
 https://drive.google.com/drive/folders/1kCke4O5IVPndeUuDvmzUe2n7M6pokksR?usp=share_link
