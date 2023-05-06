@@ -87,6 +87,12 @@ Inside the `Efficiency Data` folder, 4 different zip files contain 1, 5, 10, and
 
 (🏗️ : in progress , ❌ : not started yet , ✅ : completed)
 
+# Developer Information
+
+For users who want to further develop MusiSort's code, a different approach to installation is needed to build the program.  As with most open source projects, the first step is to fork, and then clone MusiSort's repository on Github to a local system.  If you want to contribute to MusiSort directly, instead of creating a new version of it, you can create a branch in the original repository, clone the branch, and then create a pull request for finished releases.  The link to the Github repository is located at the top of this thesis.  Now that the program's code has been successfully copied to your device, you can modify it using any code editor of your choice.
+
+Since MusiSort is a pip package, you cannot run the _`main.py`_ file directly, but you will instead need to run a few commands to build your modified version.  If you have MusiSort already installed on your system, from using the command `pip install musisort`, you will need to remove it.  You can uninstall the currently installed version through the command `pip uninstall musisort`.  After this is completed, you can begin the process to build the updated code you created.  First, open your terminal and navigate to the cloned directory within your file system.  This can be done through the command `cd <directory>`.  After you have entered the directory in your terminal, type `pip install . --upgrade`.  This command installs the pip package located in the current directory.  Since the argument _--upgrade_ is used in the command, it will automatically remove the currently installed version of the program and install the latest version you have created.  After the program has finished installing, test its installation by running the command `musisort`.  If no errors occur, and a help menu appears in the terminal window, you have successfully installed your custom version of MusiSort.    
+
 # Related Work
 
 Spotify's 15 Personalized Mood Filters
