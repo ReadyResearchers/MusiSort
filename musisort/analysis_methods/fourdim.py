@@ -1,4 +1,4 @@
-"""
+""" Waveform analysis method for 4D Sample Matrix.
 """
 
 import numpy as np
@@ -54,14 +54,6 @@ def analyze(song_waveform, song_info):
     f_v = np.vectorize(function)
     split_count = 10
     song_data = song_waveform[0]
-
-    """y = song_waveform[0]
-    sr = song_waveform[1]
-    fig, ax = plt.subplots(nrows=3, sharex=True)
-    librosa.display.waveshow(y, sr=sr, ax=ax[0])
-    ax[0].set(title='Envelope view, mono')
-    ax[0].label_outer()
-    plt.show()"""
     
     min_value = np.min(song_data)
     if min_value < 0:

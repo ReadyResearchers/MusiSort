@@ -1,3 +1,8 @@
+"""
+Functions in this file are mainly used for debugging and testing MusiSort.
+Modifying values in here will generally not affect the main program.
+"""
+
 import numpy as np
 import matplotlib.pyplot as plt
 from musisort import analysis_manager, classification_manager, file_manager, global_variables
@@ -8,11 +13,13 @@ import time
 from progress.bar import Bar
 
 def delete_section(x, perc):
+    """Deprecated version of percentage removal."""
     if random.randint(0, 99) < perc:
         return 0
     return x
 
 def delete_percent(array, percent):
+    """Silences a percentage of a waveform at an even interval."""
     changed = 0
     array_copy = np.copy(array)
     size = len(array)
@@ -26,13 +33,16 @@ def delete_percent(array, percent):
     return array_copy
 
 def reduce_waveform(waveform, percentage):
-    # 0 = 0% change, 100 = silent song
-    #delete_v = np.vectorize(delete_section)
-    #array2 = delete_v(waveform, percentage)
+    """Calls the function to delete a percetage of a waveform."""
     array2 = delete_percent(waveform, percentage)
     return array2
     
 def debug():
+    """Debug method for testing MusiSort functions.
+    
+    Used in thesis to gather results.
+    
+    Can be changed without affecting the main program."""
     # -> Make debug folder similar to all folder
     # -> Make new analyze_song in analysis_manager that just takes a waveform and song name info
     # Read single song in folder - if more than one, stop, print error

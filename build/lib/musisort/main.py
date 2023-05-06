@@ -1,4 +1,5 @@
-"""This is a docstring
+"""Main file of MusiSort.  Calls all other files, and reads commands
+sent by the terminal.
 """
 
 import sys
@@ -14,6 +15,8 @@ def main():
     exit()
 
 def on_start():
+    """Calls various starting functions in other files.
+    """
     global_variables.on_start()
     cmd_manager.on_start()
     file_manager.on_start()

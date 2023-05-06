@@ -1,4 +1,4 @@
-"""
+""" Waveform analysis method for Mel Frequency Coefficients.
 """
 
 import numpy as np

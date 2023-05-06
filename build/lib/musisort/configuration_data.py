@@ -1,4 +1,5 @@
 """
+This file handles all functions that deals with the config.
 """
 
 import os
@@ -8,11 +9,15 @@ from musisort import file_manager, global_variables
 total_config_keys = 4
 
 def on_start():
+    """When the program starts, check if config exists.
+    If it exists, read the config files.
+    """
     generate_config_file(False)
     read_config_file()
     return
 
 def change_config_file(key, value):
+    """Changes a key's value in the config with a new one."""
     path_to_config = os.path.join(file_manager.configuration_dir, "config.txt")
     f = open(path_to_config, "r")
     lines = f.readlines()
@@ -36,6 +41,7 @@ def change_config_file(key, value):
     return changed
 
 def read_config_file():
+    """Loads values in the config file into MusiSort when the program starts."""
     path_to_config = os.path.join(file_manager.configuration_dir, "config.txt")
     f = open(path_to_config, "r")
     lines = f.readlines()
@@ -56,6 +62,7 @@ def read_config_file():
     f.close()
 
 def generate_config_file(create_new):
+    """Creates a new config file if it does not exist."""
     path_to_config = os.path.join(file_manager.configuration_dir, "config.txt")
     if os.path.exists(path_to_config) and create_new == False:
         f2 = open(path_to_config, "r")
@@ -77,6 +84,7 @@ def generate_config_file(create_new):
     return
 
 def print_config_file():
+    """Prints the config to the terminal for user understanding."""
     path_to_config = os.path.join(file_manager.configuration_dir, "config.txt")
     f = open(path_to_config, "r")
     lines = f.readlines()

@@ -1,4 +1,4 @@
-"""
+""" Waveform analysis method for amplitude bounds.
 """
 
 import numpy as np

@@ -1,4 +1,4 @@
-"""
+""" Waveform analysis method for Pitch Chromagram.
 """
 
 import numpy as np

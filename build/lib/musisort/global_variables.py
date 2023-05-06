@@ -1,4 +1,5 @@
 """
+This file contains variables that may be called throughout the program's code.
 """
 
 # Strings
