@@ -1,4 +1,6 @@
 """
+This file is used to store all functions for file based operations.
+This includes saving cluster data, creating directories, saving config values.
 """
 
 from appdirs import AppDirs
@@ -35,6 +37,8 @@ Functions that deal with the creation and management of directories.
 '''
 
 def on_start():
+    """Method to create path variables on start.
+    """
     user_data_dir = dirs.user_data_dir
         
     generate_path_variables(user_data_dir)
@@ -42,6 +46,11 @@ def on_start():
     confirm_paths_exist(user_data_dir)
     
 def generate_path_variables(user_data_dir):
+    """Method to generate variables for paths to MusiSort directories.
+
+    Args:
+        user_data_dir (str): location of user directory
+    """
     global song_list_dir
     global all_song_list_dir
     global custom_song_list_dir
@@ -66,6 +75,11 @@ def generate_path_variables(user_data_dir):
         data_type_dirs[data_type] = song_data_dir + os.sep + data_type
         
 def confirm_paths_exist(user_data_dir):
+    """Function that checks if a directory exists for MusiSort.
+
+    Args:
+        user_data_dir (str): location of user directory
+    """
     # Top level folders in tree
     if not os.path.exists(user_data_dir):
         os.makedirs(user_data_dir)
@@ -115,6 +129,8 @@ def confirm_paths_exist(user_data_dir):
         os.makedirs(configuration_dir)
             
 def print_directory_list():
+    """Prints the directories necessary for MusiSort to the terminal window.
+    """
     print(global_variables.header_seperator, "\n")
     print("MusiSort Folder : ", dirs.user_data_dir, "\n")
     
@@ -152,6 +168,8 @@ loaded_songs_names = {}
 loaded_songs_ext = {}
 
 def load_songs():
+    """Loads audio files for songs and sends them to be analyzed.
+    """
     global loaded_song_names
     
     song_count = 0
@@ -188,6 +206,14 @@ def load_songs():
     return
 
 def get_songs(list_name):
+    """Gets the songs within a custom list.
+
+    Args:
+        list_name (str): The name of the list as displayed in `musisort dir`
+
+    Returns:
+        List<str>: The names of the files for each song.
+    """
     global loaded_song_names
     
     song_count = 0
@@ -213,6 +239,15 @@ def get_songs(list_name):
     return songs
     
 def get_audio_name_from_path(path):
+    """Seperates the extension and path information to 
+       get a song name from a file.
+
+    Args:
+        path (str): full path to the file.
+
+    Returns:
+        str: name of file without extension
+    """
     file_name = path
     ext = ""
     if file_name.rfind(os.sep) != -1:
@@ -225,6 +260,16 @@ def get_audio_name_from_path(path):
     return (file_name, ext, (file_name + "-" + ext))
 
 def load_song_data_file(data_type, song_file_name, song_file_ext):
+    """Gets the saved data file of a song loaded and saved by MusiSort before.
+
+    Args:
+        data_type (str): type of analysis method used to get data
+        song_file_name (str): name of audio file
+        song_file_ext (str): extension of audio file
+
+    Returns:
+        array<float>: a Numpy array of floats or integers
+    """
     # Parse file name and file extension from file path
     data_file_path = os.path.join(song_data_dir, data_type, (song_file_name + "-" + song_file_ext + ".npy"))
     
@@ -233,6 +278,14 @@ def load_song_data_file(data_type, song_file_name, song_file_ext):
     return None
          
 def save_song_data_file(data_type, song_file_name, song_file_ext, data):
+    """Saves data gathered by an analysis method to a file.
+
+    Args:
+        data_type (str): type of analysis method used to get data
+        song_file_name (str): name of audio file
+        song_file_ext (str): extension of audio file
+        data (array<>): a Numpy array filled with variables
+    """
     data_file_path = os.path.join(song_data_dir, data_type, (song_file_name + "-" + song_file_ext + ".npy"))
     
     if os.path.exists(data_file_path):
@@ -240,6 +293,16 @@ def save_song_data_file(data_type, song_file_name, song_file_ext, data):
     np.save(data_file_path, data)
    
 def load_info_data_file(song_file_name, song_file_ext, key):
+    """Gets a value stored in a text file with a key.
+
+    Args:
+        song_file_name (str): name of audio file
+        song_file_ext (str): extension of audio file
+        key (str): key to load value from
+
+    Returns:
+        val: a value that the key stored in the file
+    """
     path_to_config = os.path.join(info_type_dir, (song_file_name + "-" + song_file_ext + ".txt"))
     
     if os.path.exists(path_to_config) == False:
@@ -262,6 +325,17 @@ def load_info_data_file(song_file_name, song_file_ext, key):
     return value
  
 def save_info_data_file(song_file_name, song_file_ext, key, value):
+    """Sets a value assigned to a key in a text file to some new value.
+
+    Args:
+        song_file_name (str): name of audio file
+        song_file_ext (str): extension of audio file
+        key (str): value to set key to
+        value (val): what new value to set
+
+    Returns:
+        bool: whether the value was changed
+    """
     path_to_config = os.path.join(info_type_dir, (song_file_name + "-" + song_file_ext + ".txt"))
     
     # If the info file does not exist, create a new file and exit function
@@ -269,7 +343,7 @@ def save_info_data_file(song_file_name, song_file_ext, key, value):
         f = open(path_to_config, "w")
         f.write(key + ":" + str(value))
         f.close()
-        return
+        return True
     
     # If the info file does exist, replace the key's value with a new one
     f = open(path_to_config, "r")
@@ -297,7 +371,7 @@ def save_info_data_file(song_file_name, song_file_ext, key, value):
     return changed
     
 '''
-Functions that deal with saving classification information.
+Functions that deal with saving and loading classification information.
 '''
 
 def save_song_labels(classification_info, list_name, category_count):

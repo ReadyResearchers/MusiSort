@@ -1,4 +1,5 @@
-"""
+"""File that handles all commands in MusiSort.
+Calls other files based on what is entered by the user.
 """
 
 from musisort import classification_manager, configuration_data, file_manager, global_variables, debug_manager
@@ -26,6 +27,8 @@ command_arguments = { \
 commands = {}
 
 def parse_command(arguments):
+    """Removes extra information from sys.argv and
+    then calls the corresponding command function."""
     argument_count = len(arguments) - 1
     arguments.pop(0)
     if(argument_count == 0):
@@ -46,7 +49,7 @@ def print_help(arguments):
     print(global_variables.header_seperator)
     
 def print_info(arguments):
-    print("yo")
+    print("To be implemented...")
     
 def print_dir(arguments):
     file_manager.print_directory_list()

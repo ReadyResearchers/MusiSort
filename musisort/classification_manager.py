@@ -1,3 +1,6 @@
+"""This file contains the functions that relate to classification.
+Classification uses k-means clustering to group songs."""
+
 import numpy as np
 from sklearn import cluster
 from sklearn.cluster import KMeans
@@ -125,6 +128,9 @@ def classify_songs(list_path, category_count, debug=False):
     return (song_values, final_combined_clusters, songs)
     
 def get_silo_labels(data, n):
+    """Gather labels using silhouette score, otherwise
+    known as a way to get the best amount of clusters
+    automatically."""
     # n does nothing, just for parameter consistency
     # Takes a 2d array with each element being a vector
     # (50, 100) , 50 100 element vectors
@@ -148,15 +154,23 @@ def get_silo_labels(data, n):
     return (best_labels, best_clusters)
 
 def get_nonsilo_labels(data, k):
+    """Gather labels with k-clusters provided by user."""
     model = KMeans(n_clusters = k, n_init=5).fit(data)
     return (model.labels_, model.cluster_centers_)
 
 def get_labels_simple(data, k):
+    """Gather labels in only 1 iteration.
+    Used for large arrays to prevent crashing."""
     model = KMeans(n_clusters = k, n_init=1).fit(data)
     return (model.labels_, model.cluster_centers_)
 
 ##############################################################################
 # Functional Methods
+    """All functions below resize arrays so that they are the same size and dimensions
+    when being classified together.
+    
+    Currently not the most efficient method, could use work in the future (through research).
+    """
 
 def get_dimensions_shape(song, size_info):
     if size_info[1] == True:

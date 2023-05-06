@@ -1,6 +1,7 @@
-"""
+""" Contains all information and functions related to analyzing songs.
 """
 
+# Analysis methods located in musisort/analysis_methods
 from musisort.analysis_methods import mel
 from musisort.analysis_methods import pitch
 from musisort.analysis_methods import bounds
@@ -11,6 +12,7 @@ import numpy as np
 import librosa
 import os
 
+# Types of analysis methods located in the analysis_methods folder
 analysis_types = {"mel" : mel.analyze, "pitch" : pitch.analyze, "bounds" : bounds.analyze, \
                   "4D" : fourdim.analyze}
 
@@ -20,6 +22,7 @@ def on_start():
     return
 
 def analyze_song(path_to_song, song_file_name, song_file_ext):
+    """Sends a song's waveform to each analysis method within the analysis_types dictionary."""
     global song_waveform
     song_loaded = False
     data_file_name = song_file_name + "-" + song_file_ext + ".npy"
@@ -40,6 +43,8 @@ def analyze_song(path_to_song, song_file_name, song_file_ext):
             file_manager.save_song_data_file(data_type, song_file_name, song_file_ext, analyzed_data)
             
 def analyze_song_waveform(song_file_name, song_file_ext, waveform):
+    """This method is only used when running the debug command, rather than the analyze_song
+    function above."""
     data_file_name = song_file_name + "-" + song_file_ext + ".npy"
     for data_type in global_variables.data_types:
         # If analysis type disabled, skip step
@@ -53,6 +58,7 @@ def analyze_song_waveform(song_file_name, song_file_ext, waveform):
             file_manager.save_song_data_file(data_type, song_file_name, song_file_ext, analyzed_data)
         
 def load_song_waveform(path_to_song):
+    """Uses Librosa to load audio from its file."""
     try:
         info = librosa.load(path_to_song)
         return info
